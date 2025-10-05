@@ -1,30 +1,24 @@
-from vn_address_converter import convert_to_new_address, Address
 from vietnamadminunits import parse_address
 
-def parse_address_company(address: str):
+def parse_address_company(address, type: str = "full"):
     result = parse_address(address)
 
     address_dict = {
-        'street': result.street,      
-        'ward': result.ward,         
-        'district': result.district,  
-        'province': result.province   
+        'street': result.street,
+        'ward': result.ward,
+        'district': result.district,
+        'province': result.province
     }
-    
-    if result.district:  
-        address_obj = Address(
-            street_address=result.street,
-            ward=result.ward,
-            district=result.district,
-            province=result.province
-        )
-        
-        new_address = convert_to_new_address(address_obj)
-        
+    if type == "full":
+        return address_dict
+    elif type == "province":
+        return address_dict['province']
+    elif type == "district":
+        return address_dict['district']
+    elif type == "ward":
+        return address_dict['ward']
+    elif type == "street":
+        return address_dict['street']
+    else:
+        print("Nhập sai type")
 
-        address_dict['street'] = new_address.street_address
-        address_dict['ward'] = new_address.ward
-        address_dict['district'] = new_address.district
-        address_dict['province'] = new_address.province
-        
-    return address_dict

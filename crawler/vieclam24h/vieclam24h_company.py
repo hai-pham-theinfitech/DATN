@@ -5,7 +5,8 @@ from scrapy import signals
 import logging
 import re
 import json
-
+from address import parse_address_company
+from normalize_company_name import normalize_company_name
 
 
 # Định nghĩa Spider
@@ -58,7 +59,7 @@ class IndexSpider(scrapy.Spider):
             yield scrapy.Request(url=next_page_url, callback=self.parse)
 
     def parse_detail(self, response):
-       company_link = response.xpath('//a[@class="md:flex justify-between items-start"]/@href').get()
+       company_link = response.xpath("//a[contains(@href, '/danh-sach-tin-tuyen-dung')]/@href").get()
        link = "https://vieclam24h.vn" + company_link if company_link else None
        yield scrapy.Request(url=link, callback=self.parse_job)
     
@@ -74,16 +75,30 @@ class IndexSpider(scrapy.Spider):
         if company_id in self.crawled_company_id:
             self.log(f'Skipping already crawled company ID: {company_id}')
             return
+        address = company.get('address', '')
+        if address:
+            province = parse_address_company(address, type="province")
+            district = parse_address_company(address, type="district")
+            street = parse_address_company(address, type="street")
+            ward = parse_address_company(address, type="ward")
+                    
+        
         data_company =  {
             'company_id': company.get('id', ''),
             'source_company_url': response.url,
             'company_name': company.get('name', ''),
+            'company_only_name': normalize_company_name(company.get('name', '')),
             'company_slug': company.get('slug', ''),
             'company_address': company.get('address', ''),
             'company_province_id': company.get('province', ''),
             'company_description': company.get('description', ''),
             'company_description_html': company.get('description_html', ''),
-            'company_tax_code': company.get('tax_code', ''), 
+            'company_tax_code': company.get('tax_code', ''),
+            'province': province if address else '',
+            'district': district if address else '',
+            'ward': ward if address else '',
+            'street': street if address else '',
+            
             
         }
         self.log(f'Company data: {data_company}')

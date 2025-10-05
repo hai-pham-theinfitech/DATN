@@ -5,6 +5,8 @@ from scrapy import signals
 import logging
 import re
 import json
+from address import parse_address_company
+from normalize_company_name import normalize_company_name
 
 # Định nghĩa Spider
 class IndexSpider(scrapy.Spider):
@@ -12,19 +14,29 @@ class IndexSpider(scrapy.Spider):
     start_urls = [f"https://www.careerlink.vn/tim-viec-lam-nhanh"]
     crawled_company_id = set()
     custom_settings = {
-       
+#         'ROTATING_PROXY_LIST': [
+#             'http://mobi8:Infi2132@api.yourproxy.click:5108',
+#             'http://mobi7:Infi2132@api.yourproxy.click:5107',
+#             'http://mobi6:Infi2132@api.yourproxy.click:5106',
+#             'http://mobi5:Infi2132@api.yourproxy.click:5105',
+#             'http://mobi4:Infi2132@api.yourproxy.click:5104',
+#             'http://mobi3:Infi2132@api.yourproxy.click:5103',
+#             'http://mobi2:Infi2132@api.yourproxy.click:5102'
+#         ],
 
-        'DOWNLOADER_MIDDLEWARES': {
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
-},
+#         'DOWNLOADER_MIDDLEWARES': {
+#     'careerlink.careerlink_proxy.middlewares.SimpleProxyMiddleware': 100, 
+#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+#     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
+# },
 
 
         'RETRY_HTTP_CODES': [403, 429, 500, 502, 503, 504],
         'RETRY_TIMES': 5,
-        'DOWNLOAD_DELAY': 2,
+        'DOWNLOAD_DELAY': 1,
         'RANDOMIZE_DOWNLOAD_DELAY': True,
         'CONCURRENT_REQUESTS': 8,
-        'COOKIES_ENABLED': True,
+        'COOKIES_ENABLED': False,
         'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
     }
 
@@ -54,9 +66,9 @@ class IndexSpider(scrapy.Spider):
         
         name = response.xpath("//h5[@itemprop='name']/text()").get()
         print(f"Crawling company: {response.url}")
-        json_data = response.xpath('//script[@type="application/ld+json"]/text()').getall()
+        json_ld = response.xpath('//script[@type="application/ld+json"]/text()').getall()
         
-        for json_data in json_data:
+        for json_data in json_ld:
             if 'Professionalservice' in json_data:
                 json_ld = json.loads(json_data)
                 open_hours_dict = {}
@@ -72,6 +84,7 @@ class IndexSpider(scrapy.Spider):
                 company_data = {
                     'company_id': response.url.split('/')[-1],
                     'company_name': json_ld.get('name', ''),
+                    'company_only_name': normalize_company_name(json_ld.get('name', '')) if json_ld.get('name', '') else None,
                     'company_representative': json_ld.get("founder", ''),
                     'company_description': json_ld.get('description', ''),
                     'company_email': json_ld.get('email', ''),
@@ -85,21 +98,20 @@ class IndexSpider(scrapy.Spider):
                     'company_address_country': json_ld.get('location', {}).get('address',{}).get('addressCountry', ''),
                     'company_postal_code': json_ld.get('location', {}).get('address',{}).get('postalCode', ''),
                     'company_address': response.xpath('//i[@class="cli-map-pin-line d-flex mr-2"]/text()').get(),
+                    'province': parse_address_company(response.xpath('//i[@class="cli-map-pin-line d-flex mr-2"]/text()').get(), type="province"),
+                    'district': parse_address_company(response.xpath('//i[@class="cli-map-pin-line d-flex mr-2"]/text()').get(), type="district"),
+                    'ward': parse_address_company(response.xpath('//i[@class="cli-map-pin-line d-flex mr-2"]/text()').get(), type="ward"),
+                    'street': parse_address_company(response.xpath('//i[@class="cli-map-pin-line d-flex mr-2"]/text()').get(), type="street"),
                     'company_social_url': json_ld.get('sameAs', []),
                     'company_open_hour': json_ld.get('open_hours',),
                     'company_working_hours': open_hours_dict,
                     
         
                 }
+                print(company_data)
                 yield company_data
         
         
-        
-        
-        
-            
-          
-
 
     
 def run_index_crawler():

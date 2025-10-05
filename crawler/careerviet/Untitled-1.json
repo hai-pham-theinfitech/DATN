@@ -1,0 +1,65 @@
+{
+  "@context": "https://schema.org",
+  "@type": "JobPosting",
+  "inLanguage": "vi",
+  "title": "Nhân Viên Thiết Kế Công Trình 3D",
+  "description": "<p>- Trực tiếp tham gia thiết kế các công trình nhà hàng, nội thất cửa hàng Mixue, ...</p><p>- Lên ý tưởng, phương án thiết kế.</p><p>- Hiểu biết về chất liệu và thi công</p><p>- Triển khai thiết kế kiến trúc, nội thất các hạng mục của cửa hàng</p><p>- Quản lý công việc tốt, sáng tạo, nhiệt tình, tinh thần trách nhiệm cao trong công việc</p><p>- Chi tiết công việc sẽ trao đổi cụ thể khi phỏng vấn</p><p><strong>Yêu cầu ứng viên</strong></p><p>- Nam nữ từ 25 – 32 tuổi</p><p>- Có kinh nghiệm thiết kế nội-ngoại thất tối thiểu 1 năm ở vị trí tương đương.</p><p>- Thành thạo các phần mềm thiết kế Sketchup hoặc 3Dsmax, Autocad, Photoshop, ....</p><p>- Trình độ: Cao đẳng trở lên</p><p><strong>Quyền lợi được hưởng</strong></p><p>- Thời gian làm việc: Từ T2 đến T7, từ 9AM - 6PM, tháng nghỉ CN+ 1 ngày T7</p><p>- Lương: 11.000.000 – 16.000.000 đ</p><p>- Môi trường làm việc trẻ trung, năng động, chuyên nghiệp. Đồng nghiệp thân thiện, hòa đồng...</p><p>- Có cơ hội phát triển, thăng tiến trong sự nghiệp</p><p>Ngành nghề: Mỹ thuật / Nghệ thuật / Thiết kế, Xây dựng, Kiến trúc</p><p>Kinh nghiệm: 1 Năm</p><p>Cấp bậc: Nhân viên</p><p>Hình thức: Nhân viên chính thức</p><p>Địa điểm: Hà Nội</p>",
+  "datePosted": "2025-10-02T02:00:02Z",
+  "validThrough": "2025-10-11T23:59:00Z",
+  "baseSalary": {
+    "@type": "MonetaryAmount",
+    "currency": "VND",
+    "value": {
+      "@type": "QuantitativeValue",
+      "minValue": 11000000,
+      "maxValue": 16000000,
+      "unitText": "MONTH"
+    }
+  },
+  "industry": "Mỹ thuật / Nghệ thuật / Thiết kế, Xây dựng, Kiến trúc",
+  "jobBenefits": "Chế độ bảo hiểm, Du Lịch, Chế độ thưởng, Chăm sóc sức khỏe, Đào tạo, Tăng lương, Nghỉ phép năm",
+  "experienceRequirements": {
+    "@type": "OccupationalExperienceRequirements",
+    "monthsOfExperience": 12,
+    "description": "Kinh nghiệm 1 Năm"
+  },
+  "educationRequirements": {
+    "@type": "EducationalOccupationalCredential",
+    "credentialCategory": "bachelor degree",
+    "alternateName": "Cao đẳng"
+  },
+  "directApply": true,
+  "url": "https://careerviet.vn/vi/tim-viec-lam/nhan-vien-thiet-ke-cong-trinh-3d.35C5700E.html",
+  "identifier": {
+    "@type": "PropertyValue",
+    "name": "CÔNG TY TNHH SNOW KING GLOBAL",
+    "value": "35C5700E"
+  },
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "CÔNG TY TNHH SNOW KING GLOBAL",
+    "url": "https://careerviet.vn/vi/nha-tuyen-dung/cong-ty-tnhh-snow-king-global.35A9865D.html",
+    "logo": "https://images.careerviet.vn/employer_folders/lot9/302429/110x55/150404logo-snowking.png",
+    "description": "<p>CÔNG TY TNHH SNOW KING GLOBAL hoạt động trong lĩnh vực dịch vụ đồ uống và là công ty có vốn đầu tư nước ngoài với lịch sử hơn 20 năm phát triển.<br /><br />Thương hiệu MIXUE của chúng tôi đã phủ sóng trên hầu hết các tỉnh thành của Việt Nam, với tầm nhìn doanh nghiệp 'Đơn giản, chuyên tâm, xây dựng thương hiệu người người kính nể' chúng tôi luôn không ngừng nỗ lực để mỗi người trên thế giới đều được sử dụng sản phẩm chất lượng với giá thành rẻ.</p>"
+  },
+  "employmentType": ["FULL_TIME"],
+  "jobLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Lancaster Luminaire, 1152 Đường Láng, Láng Thượng, Đống Đa, Hà Nội",
+      "addressRegion": "Quận Đống Đa",
+      "addressLocality": "Hà Nội",
+      "postalCode": "10000",
+      "addressCountry": "VN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 21.02614451900007,
+      "longitude": 105.79900894200006
+    }
+  },
+  "skills": "designer,  chuyên viên thiết kế,  3d,  thiết kế công trình,  thiết kế công trình 3d",
+  "workHours": "8:00-17:00",
+  "applicantLocationRequirements": { "@type": "Country", "name": "Việt Nam" }
+}

@@ -4,7 +4,8 @@ from scrapy.signalmanager import dispatcher
 from scrapy import signals
 import logging
 import json
-# Định nghĩa Spider
+from address import parse_address_company
+from normalize_company_name import normalize_company_name
 class IndexSpider(scrapy.Spider):
     name = 'index_crawler'
     start_urls = ["https://careerviet.vn/viec-lam-noi-bat-trong-tuan-l4a10p"]  # Trang index ban đầu
@@ -47,19 +48,23 @@ class IndexSpider(scrapy.Spider):
      
             
             company = json_ld.get("hiringOrganization", {})
-            yield {
+            data = {
                 'type': 'company',
                 'company_id': json_ld.get("identifier", {}).get("value", ""),
                 'company_name': company.get("name", ""),
+                'company_description': company.get("description", ""),
+                'company_only_name': normalize_company_name(company.get("name", "")) if company.get("name", "") else None,
                 'company_url': company.get("url", ""),
-                'company_homepage': company.get("sameAs", ""),
                 'company_logo': company.get("logo", ""),
-                'company_street_address': json_ld.get("jobLocation", {}).get("streetAddress", ""),
-                'company_locality_address': json_ld.get("jobLocation", {}).get("addressLocality", ""),
-                'company_region_address': json_ld.get("jobLocation", {}).get("addressRegion", ""),
-                'company_country_address': json_ld.get("jobLocation", {}).get("addressCountry", ""),
+                'company_address': json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""),
+                'province': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="province") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
+                'district': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="district") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
+                'ward': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="ward") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
+                'street': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="street"),
                 'company_postal_code': json_ld.get("jobLocation", {}).get("postalCode", ""),
             }
+            print(data)
+            yield data
 
 
 
@@ -68,7 +73,7 @@ def run_index_crawler():
     process = CrawlerProcess(settings={
         "LOG_LEVEL": "INFO",
         "FEEDS": {
-            "/opt/airflow/job.json": {"format": "json"},
+            "/opt/airflow/master_company.json": {"format": "json"},
         },
     })
 

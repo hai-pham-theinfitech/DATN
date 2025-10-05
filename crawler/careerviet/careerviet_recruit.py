@@ -6,7 +6,6 @@ import logging
 import re
 import json
 
-from crawler.ingest_id import generate_ingest_id
 
 
 # Định nghĩa Spider
@@ -73,7 +72,6 @@ class IndexSpider(scrapy.Spider):
                 'job_region_address': json_ld.get("jobLocation", {}).get("addressRegion", ""),
                 'job_country_address': json_ld.get("jobLocation", {}).get("addressCountry", ""),
                 'job_postal_code': json_ld.get("jobLocation", {}).get("postalCode", ""),
-                'ingest_id': generate_ingest_id(),
             }
         
             

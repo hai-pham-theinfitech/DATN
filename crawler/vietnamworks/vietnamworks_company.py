@@ -1,4 +1,3 @@
-from deltalake import DeltaTable
 import scrapy
 from address import parse_address
 from scrapy.crawler import CrawlerProcess
@@ -6,6 +5,8 @@ from scrapy.signalmanager import dispatcher
 from scrapy import signals
 import logging
 import json
+from address import parse_address_company
+from normalize_company_name import normalize_company_name
 import html
 
 
@@ -96,8 +97,6 @@ class IndexSpider(scrapy.Spider):
         
         
         
-        
-   
 
     def clean_html(text):
         return html.unescape(text or "").replace("<li>", "- ").replace("</li>", "\n").replace("<br>", "\n").strip()
@@ -116,18 +115,24 @@ class IndexSpider(scrapy.Spider):
     "type": "company",
      "company_id": company_id,
     "company_name": company.get("companyName"),
+    "company_only_name": normalize_company_name(company.get("companyName")) if company.get("companyName") else None,
     "company_profile": clean_html(company.get("companyProfile")),
     "company_size": company.get("companySize"),
     "company_logo": company.get("companyLogo"),
     "company_address": company.get("address"),
+    "province": parse_address_company(company.get("address"), type="province") if company.get("address") else "",
+    "district": parse_address_company(company.get("address"), type="district") if company.get("address") else "",
+    "ward": parse_address_company(company.get("address"), type="ward") if company.get("address") else "",
+    "street": parse_address_company(company.get("address"), type="street") if company.get("address") else "",
     "industry": company.get("industriesV3")[0]["industryV3Name"] if company.get("industriesV3") else "",
     
 }
 
             
             self.crawled_company_ids.add(company_id)
-            yield company
+
             print(company)
+            yield company
 
 
 
