@@ -45,8 +45,12 @@ class IndexSpider(scrapy.Spider):
             if "JobPosting" not in json_raw:
                 continue
             json_ld = json.loads(json_raw)
-                
-            # Lấy dữ liệu từ trang chi tiết
+            job_locations = json_ld.get("jobLocation", [])
+            company_address = ""
+            if isinstance(job_locations, list) and len(job_locations) > 0:
+                company_address = job_locations[0].get("address", {}).get("streetAddress", "")
+            elif isinstance(job_locations, dict):
+                company_address = job_locations.get("address", {}).get("streetAddress", "")
             yield {
                 'type': 'job',
                 'job_id':  response.url.split('/')[-1].replace('.html', ''),
@@ -57,9 +61,11 @@ class IndexSpider(scrapy.Spider):
                 'job_industry': json_ld.get("industry", ""), 
                 'job_created_at': json_ld.get("datePosted", ""),
                 'job_valid_through': json_ld.get("validThrough", ""),
-                'job_description': ' '.join(json_ld.get("description", "").replace('\xa0', ' ').replace('\r', ' ').replace('\n', ' ').replace('\t', ' ').split()).strip(),
+                'job_description': ' '.join(json_ld.get("description", "").replace('\xa0', ' ').replace('\r', ' ').replace('\n', ' ').replace('\t', ' ').split()),
                 'source_job_url': response.url,
                 'job_salary': json_ld.get("baseSalary", {}).get("value", {}).get("value", ""),
+                'job_min_salary': json_ld.get("baseSalary", {}).get("value", {}).get("minValue", ""),
+                'job_max_salary': json_ld.get("baseSalary", {}).get("value", {}).get("maxValue", ""),
                 'job_salary_level': json_ld.get("baseSalary", {}).get("value", {}).get("unitText", ""),
                 'job_exp_requirement': json_ld.get("experienceRequirements", {}).get("monthsOfExperience", ""),
                 'job_salary_currency': json_ld.get("baseSalary", {}).get("value", {}).get("currency", ""),
@@ -67,11 +73,7 @@ class IndexSpider(scrapy.Spider):
                 'job_skills': json_ld.get("skills", ""),
                 'job_working_hours': json_ld.get("workHours", ""),
                 'job_education_requirement': json_ld.get("educationRequirements", {}).get("credentialCategory",""),
-                'job_street_address': json_ld.get("jobLocation", {}).get("streetAddress", ""),
-                'job_locality_address': json_ld.get("jobLocation", {}).get("addressLocality", ""),
-                'job_region_address': json_ld.get("jobLocation", {}).get("addressRegion", ""),
-                'job_country_address': json_ld.get("jobLocation", {}).get("addressCountry", ""),
-                'job_postal_code': json_ld.get("jobLocation", {}).get("postalCode", ""),
+                'job_street_address': company_address,
             }
         
             

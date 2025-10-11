@@ -6,7 +6,7 @@ import logging
 import json
 import html
 
-from crawler.ingest_id import generate_ingest_id
+from crawler.match_company import generate_ingest_id
 
 
 def clean_html(text):

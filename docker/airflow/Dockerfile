@@ -55,15 +55,22 @@ RUN echo "Downloading Hadoop AWS and AWS SDK bundle JARs..." && \
     && echo "JARs downloaded to /opt/spark/jars/"
 # --- Kết thúc phần thêm vào ---
 
+# ⬇️ THÊM PHẦN NÀY ĐỂ FIX QUYỀN CHO CRAWLER FOLDER ⬇️
+# Tạo folder crawler và set quyền
+RUN mkdir -p /opt/airflow/crawler && \
+    chown -R airflow:root /opt/airflow/crawler && \
+    chmod -R 775 /opt/airflow/crawler
+# ⬆️ KẾT THÚC PHẦN THÊM ⬆️
+
 # Chuyển sang user 'airflow' trước khi cài đặt các gói Python
 USER airflow
+RUN pip install pyspark
 RUN pip install scrapy
 RUN pip install deltalake
 RUN pip install delta-spark pyspark minio
 RUN pip install vn_address_converter
 RUN pip install vietnamadminunits
+RUN pip install pendulum
 
-# Cài đặt các package cần thiết cho PySpark, Delta Lake và MinIO
-RUN pip install --no-cache-dir --default-timeout=120 minio pyspark delta-spark==3.0.0
+RUN pip install --no-cache-dir --default-timeout=120 minio pyspark==3.5.6 delta-spark==3.0.0
 
-# Image gốc của Airflow thường kết thúc với USER airflow, nên đây cũng là user mặc định khi container chạy.

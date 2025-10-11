@@ -7,7 +7,7 @@ import re
 import json
 import random
 
-from crawler.ingest_id import generate_ingest_id
+from address import parse_address_company
 
 # Định nghĩa Spider
 
@@ -30,7 +30,7 @@ class IndexSpider(scrapy.Spider):
         ],
 
         'DOWNLOADER_MIDDLEWARES': {
-    'vieclam24h.middlewares.SimpleProxyMiddleware': 100, 
+    'vieclam24h.vieclam24h_proxy.middlewares.SimpleProxyMiddleware': 100, 
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
 },
@@ -69,7 +69,7 @@ class IndexSpider(scrapy.Spider):
             if "JobPosting" not in json_raw:
                 continue
             json_ld = json.loads(json_raw)
-                
+          
             # Lấy dữ liệu từ trang chi tiết
             yield {
                 'type': 'job',
@@ -88,16 +88,14 @@ class IndexSpider(scrapy.Spider):
                 'job_benefits': json_ld.get('benefits', ''),
                 'job_skills': ", ".join(json_ld['skills']) if isinstance(json_ld.get('skills'), list) else json_ld.get('skills', ''),
                 'job_street_address': json_ld.get('jobLocation', [{}])[0].get('address', {}).get('streetAddress', ''),
-                'job_locality_address': json_ld.get('jobLocation', [{}])[0].get('address', {}).get('addressLocality', ''),
-                'job_region_address': json_ld.get('jobLocation', [{}])[0].get('address', {}).get('addressRegion', ''),
                 'job_postal_code': json_ld.get('jobLocation', [{}])[0].get('address', {}).get('postalCode', ''),
                 'job_company_name':  json_ld.get("hiringOrganization", {}).get("name", ""),
                 'job_company_url': json_ld.get("hiringOrganization", {}).get("sameAs", ""),
                 'job_company_id': json_ld.get("identifier", {}).get("value", ""),
                 'job_company_logo': json_ld.get("hiringOrganization", {}).get("logo", ""),
-                'ingest_id': generate_ingest_id()
 
             }
+           
         
 
     

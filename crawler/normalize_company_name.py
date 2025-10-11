@@ -9,6 +9,9 @@ def normalize_text(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     return text.strip().lower()
 
+def remove_brackets(text: str) -> str:
+    # Loại bỏ tất cả nội dung trong (), bao gồm dấu ()
+    return re.sub(r'\s*\(.*?\)\s*', '', text).strip()
 
 def normalize_company_name(full_name: str) -> str:
     """
@@ -55,4 +58,4 @@ def normalize_company_name(full_name: str) -> str:
     # Chuẩn hóa khoảng trắng và chữ thường
     name = normalize_text(name)
 
-    return name
+    return remove_brackets(name)

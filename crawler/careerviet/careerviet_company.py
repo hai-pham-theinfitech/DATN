@@ -8,7 +8,7 @@ from address import parse_address_company
 from normalize_company_name import normalize_company_name
 class IndexSpider(scrapy.Spider):
     name = 'index_crawler'
-    start_urls = ["https://careerviet.vn/viec-lam-noi-bat-trong-tuan-l4a10p"]  # Trang index ban đầu
+    start_urls = ["https://careerviet.vn/viec-lam-noi-bat-trong-tuan-l4a10p"]  
     crawled_ids = set()  
     custom_settings = {
         'ROBOTSTXT_OBEY': True,
@@ -45,7 +45,18 @@ class IndexSpider(scrapy.Spider):
             if "JobPosting" not in json_raw:
                 continue
             json_ld = json.loads(json_raw)
-     
+            job_locations = json_ld.get("jobLocation", [])
+
+            # Khởi tạo trường company_address
+            company_address = ""
+            company_postal_code = ""
+
+            if isinstance(job_locations, list) and len(job_locations) > 0:
+                company_address = job_locations[0].get("address", {}).get("streetAddress", "")
+                company_postal_code = job_locations[0].get("postalCode", "")
+            elif isinstance(job_locations, dict):
+                company_address = job_locations.get("address", {}).get("streetAddress", "")
+                company_postal_code = job_locations.get("postalCode", "")
             
             company = json_ld.get("hiringOrganization", {})
             data = {
@@ -55,13 +66,15 @@ class IndexSpider(scrapy.Spider):
                 'company_description': company.get("description", ""),
                 'company_only_name': normalize_company_name(company.get("name", "")) if company.get("name", "") else None,
                 'company_url': company.get("url", ""),
+                'company_domain': response.xpath('//li[contains(text(), "Website:")]/text()').get().replace('Website:', '').strip() if response.xpath('//li[contains(text(), "Website:")]/text()').get() else "",
                 'company_logo': company.get("logo", ""),
-                'company_address': json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""),
-                'province': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="province") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
-                'district': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="district") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
-                'ward': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="ward") if json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", "") else "",
-                'street': parse_address_company(json_ld.get("jobLocation", {}).get("address",{}).get("streetAddress", ""), type="street"),
-                'company_postal_code': json_ld.get("jobLocation", {}).get("postalCode", ""),
+                'company_address': company_address,
+                'province': parse_address_company(company_address) if company_address else "",
+                'district': parse_address_company(company_address, type="district") if company_address else "",
+                'ward': parse_address_company(company_address, type="ward") if company_address else "",
+                'street': parse_address_company(company_address, type="street") if company_address else "",
+                'source_company_url': response.url,
+                'company_postal_code': company_postal_code if company_postal_code else "",
             }
             print(data)
             yield data

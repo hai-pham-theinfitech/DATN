@@ -15,21 +15,21 @@ class IndexSpider(scrapy.Spider):
     start_urls = [f"https://vieclam24h.vn/tim-kiem-viec-lam-nhanh"]
     crawled_company_id = set()
     custom_settings = {
-#         'ROTATING_PROXY_LIST': [
-#             'http://mobi8:Infi2132@api.yourproxy.click:5108',
-#             'http://mobi7:Infi2132@api.yourproxy.click:5107',
-#             'http://mobi6:Infi2132@api.yourproxy.click:5106',
-#             'http://mobi5:Infi2132@api.yourproxy.click:5105',
-#             'http://mobi4:Infi2132@api.yourproxy.click:5104',
-#             'http://mobi3:Infi2132@api.yourproxy.click:5103',
-#             'http://mobi2:Infi2132@api.yourproxy.click:5102'
-#         ],
+        'ROTATING_PROXY_LIST': [
+            'http://mobi8:Infi2132@api.yourproxy.click:5108',
+            'http://mobi7:Infi2132@api.yourproxy.click:5107',
+            'http://mobi6:Infi2132@api.yourproxy.click:5106',
+            'http://mobi5:Infi2132@api.yourproxy.click:5105',
+            'http://mobi4:Infi2132@api.yourproxy.click:5104',
+            'http://mobi3:Infi2132@api.yourproxy.click:5103',
+            'http://mobi2:Infi2132@api.yourproxy.click:5102'
+        ],
 
-#         'DOWNLOADER_MIDDLEWARES': {
-#     'vieclam24h.middlewares.SimpleProxyMiddleware': 100, 
-#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-#     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
-# },
+        'DOWNLOADER_MIDDLEWARES': {
+    'vieclam24h.vieclam24h_proxy.middlewares.SimpleProxyMiddleware': 100, 
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
+},
 
 
         'RETRY_HTTP_CODES': [403, 429, 500, 502, 503, 504],
@@ -87,6 +87,7 @@ class IndexSpider(scrapy.Spider):
             'company_id': company.get('id', ''),
             'source_company_url': response.url,
             'company_name': company.get('name', ''),
+            'company_domain': response.xpath('//div[@class="truncate" and contains(@title, "https")]/@title').get(),
             'company_only_name': normalize_company_name(company.get('name', '')),
             'company_slug': company.get('slug', ''),
             'company_address': company.get('address', ''),

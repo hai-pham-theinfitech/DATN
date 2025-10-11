@@ -59,99 +59,52 @@ def get_spark_session():
 
 
 def process_and_upload_to_minio(media: str, **kwargs):
-    # 1. Đọc dữ liệu từ JSON Lines
-    records = []
-    try:
-        with open(f'{media}_recruit.jsonl', 'r', encoding='utf-8') as f:
-            for line in f:
-                records.append(json.loads(line.strip()))
-        print(f"==> Đã load {len(records)} records từ {f'{media}_recruit.jsonl'}")
-    except Exception as e:
-        print(f"Error reading JSON Lines file: {e}")
-        return
-
-    spark = get_spark_session()
-
-    # 2. Chuyển đổi dữ liệu sang Spark DataFrame
-    try:
-        df = spark.createDataFrame(records)
-        print(f"==> Spark DataFrame có {df.count()} dòng")
-        df.select("job_id", "job_title").show(5, truncate=False)
-    except Exception as e:
-        print(f"Error creating Spark DataFrame: {e}")
-        return
-
-    # 3. Ghi dữ liệu vào định dạng Delta Lake
+    """
+    Đọc file JSON Lines của media, loại bỏ duplicate company_id, ghi vào Delta Lake,
+    và upload toàn bộ Delta folder lên MinIO.
+    """
+    json_path = f"/opt/airflow/crawler/{media}/{media}_recruit.jsonl"
     delta_output_path = f"s3a://{MINIO_BUCKET_NAME}/raw/{media}/recruit"
-    try:
-        df.write.format("delta").mode("overwrite").save(delta_output_path)
-        print(f"✅ Data written to Delta Lake at {delta_output_path}")
-    except Exception as e:
-        print(f"Error writing to Delta Lake: {e}")
-        return
 
-    # 5. Tải dữ liệu Delta Lake lên MinIO
-    try:
-        client = Minio(
-            MINIO_HOST,
-            access_key=MINIO_ACCESS_KEY,
-            secret_key=MINIO_SECRET_KEY,
-            secure=False
-        )
-
-        # Tải toàn bộ thư mục Delta Lake lên MinIO
-        for root, dirs, files in os.walk(delta_output_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                object_name = os.path.relpath(file_path, delta_output_path)
-                client.fput_object(MINIO_BUCKET_NAME, object_name, file_path)
-                print(f"✅ Uploaded {file_path} to bucket {MINIO_BUCKET_NAME} as {object_name}")
-    except Exception as e:
-        print(f"Error uploading to MinIO: {e}")
-
-        
-        
-        
-    ## company
-def process_and_upload_to_minio_company(media: str, **kwargs):
-    
-    # 1. Đọc dữ liệu từ JSON Lines
-    records = []
-    try:
-        with open(f"/opt/airflow/crawler/{media}_company.jsonl", 'r', encoding='utf-8') as f:
-            for line in f:
-                records.append(json.loads(line))
-    except Exception as e:
-        print(f"Error reading JSON Lines file: {e}")
-        return
+    # 1. Khởi tạo Spark
     spark = get_spark_session()
+
+    # 2. Đọc JSON Lines trực tiếp bằng Spark (tự infer schema)
     try:
-        df = spark.createDataFrame(records)
+        df = spark.read.option("multiLine", False).json(json_path)
+        print(f"DataFrame created: {df.count()} rows, columns: {df.columns}")
     except Exception as e:
-        print(f"Error creating Spark DataFrame: {e}")
+        print(f"Error reading JSON Lines with Spark: {e}")
         return
 
-    delta_output_path = f"s3a://{MINIO_BUCKET_NAME}/raw/{media}/company"
+    # 3. Loại bỏ các company_id duplicate
     try:
-        df.write.format("delta").mode("overwrite").save(delta_output_path)
+        df_distinct = df.dropDuplicates(["job_id"])
+        print(f"Distinct job_id count: {df_distinct.count()}")
+    except Exception as e:
+        print(f"Error removing duplicates: {e}")
+        return
+
+    # 4. Ghi Delta Lake (overwrite)
+    try:
+        df_distinct.write.format("delta").mode("overwrite").save(delta_output_path)
         print(f"Data written to Delta Lake at {delta_output_path}")
     except Exception as e:
         print(f"Error writing to Delta Lake: {e}")
         return
 
-    # 4. Kiểm tra Delta Log
+    # 5. Kiểm tra Delta log
     try:
         delta_log_path = os.path.join(delta_output_path, "_delta_log")
         if os.path.exists(delta_log_path):
             print(f"Delta Log exists at {delta_log_path}")
         else:
             print(f"Delta Log not found at {delta_log_path}")
-            return
     except Exception as e:
         print(f"Error checking Delta Log: {e}")
         return
 
-    # 5. Tải dữ liệu Delta Lake lên MinIO
+    # 6. Upload MinIO
     try:
         client = Minio(
             MINIO_HOST,
@@ -160,17 +113,87 @@ def process_and_upload_to_minio_company(media: str, **kwargs):
             secure=False
         )
 
-        # Tải toàn bộ thư mục Delta Lake lên MinIO
+        # Upload tất cả file trong thư mục Delta
         for root, dirs, files in os.walk(delta_output_path):
             for file in files:
                 file_path = os.path.join(root, file)
                 object_name = os.path.relpath(file_path, delta_output_path)
                 client.fput_object(MINIO_BUCKET_NAME, object_name, file_path)
-                print(f"Uploaded {file_path} to bucket {MINIO_BUCKET_NAME} as {object_name}")
+                print(f"Uploaded {file_path} -> bucket {MINIO_BUCKET_NAME} as {object_name}")
     except Exception as e:
         print(f"Error uploading to MinIO: {e}")
+
         
-from datetime import datetime
+        
+        
+
+def process_and_upload_to_minio_company(media: str, **kwargs):
+    """
+    Đọc file JSON Lines của media, loại bỏ duplicate company_id, ghi vào Delta Lake,
+    và upload toàn bộ Delta folder lên MinIO.
+    """
+    json_path = f"/opt/airflow/crawler/{media}/{media}_company.jsonl"
+    delta_output_path = f"s3a://{MINIO_BUCKET_NAME}/raw/{media}/company"
+
+    # 1. Khởi tạo Spark
+    spark = get_spark_session()
+
+    # 2. Đọc JSON Lines trực tiếp bằng Spark (tự infer schema)
+    try:
+        df = spark.read.option("multiLine", False).json(json_path)
+        print(f"DataFrame created: {df.count()} rows, columns: {df.columns}")
+    except Exception as e:
+        print(f"Error reading JSON Lines with Spark: {e}")
+        return
+
+    # 3. Loại bỏ các company_id duplicate
+    try:
+        df_distinct = df.dropDuplicates(["company_id"])
+        print(f"Distinct company_id count: {df_distinct.count()}")
+    except Exception as e:
+        print(f"Error removing duplicates: {e}")
+        return
+
+    # 4. Ghi Delta Lake (overwrite)
+    try:
+        df_distinct.write.format("delta").mode("overwrite").save(delta_output_path)
+        print(f"Data written to Delta Lake at {delta_output_path}")
+    except Exception as e:
+        print(f"Error writing to Delta Lake: {e}")
+        return
+
+    # 5. Kiểm tra Delta log
+    try:
+        delta_log_path = os.path.join(delta_output_path, "_delta_log")
+        if os.path.exists(delta_log_path):
+            print(f"Delta Log exists at {delta_log_path}")
+        else:
+            print(f"Delta Log not found at {delta_log_path}")
+    except Exception as e:
+        print(f"Error checking Delta Log: {e}")
+        return
+
+    # 6. Upload MinIO
+    try:
+        client = Minio(
+            MINIO_HOST,
+            access_key=MINIO_ACCESS_KEY,
+            secret_key=MINIO_SECRET_KEY,
+            secure=False
+        )
+
+        # Upload tất cả file trong thư mục Delta
+        for root, dirs, files in os.walk(delta_output_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                object_name = os.path.relpath(file_path, delta_output_path)
+                client.fput_object(MINIO_BUCKET_NAME, object_name, file_path)
+                print(f"Uploaded {file_path} -> bucket {MINIO_BUCKET_NAME} as {object_name}")
+    except Exception as e:
+        print(f"Error uploading to MinIO: {e}")
+
+
+
 
 
 
@@ -186,11 +209,11 @@ def bash(media: str, type: str):
 
         echo "Scrapy command finished. Checking for output file..."
 
-        if [ ! -f "/opt/airflow/crawler/{media}_{type}.jsonl" ]; then
-            echo "Error: Raw output file '/opt/airflow/crawler/{media}_{type}.jsonl' not found! The spider might have failed to run or produce output."
+        if [ ! -f "/opt/airflow/crawler/{media}/{media}_{type}.jsonl" ]; then
+            echo "Error: Raw output file '/opt/airflow/crawler/{media}/{media}_{type}.jsonl' not found! The spider might have failed to run or produce output."
             exit 1
         else
-            echo "Raw output file '/opt/airflow/crawler/{media}_{type}.jsonl' found. Task successful."
+            echo "Raw output file '/opt/airflow/crawler/{media}/{media}_{type}.jsonl' found. Task successful."
         fi
     """
     return command

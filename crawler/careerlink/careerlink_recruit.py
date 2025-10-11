@@ -25,7 +25,7 @@ class IndexSpider(scrapy.Spider):
         ],
 
         'DOWNLOADER_MIDDLEWARES': {
-    'careerlink.middlewares.SimpleProxyMiddleware': 100, 
+    'careerlink.careerlink_proxy.middlewares.SimpleProxyMiddleware': 100, 
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
 },
@@ -44,7 +44,7 @@ class IndexSpider(scrapy.Spider):
        categories = response.xpath('//div[@class="jobs-quick-category"]//a')
        for category in categories:
            category_url = response.urljoin(category.xpath('@href').get())
-           category_text = category.xpath('text()').get().strip()
+           category_text = category.xpath('text()').get()
            yield scrapy.Request(url=category_url, callback=self.parse_page, meta={'category': category_text})
 
     def parse_page(self, response):
@@ -64,20 +64,20 @@ class IndexSpider(scrapy.Spider):
         
         job_title = response.xpath("//h1[@id='job-title']/text()").get()
         job_id = response.url.split('/')[-1]
-        address = " ".join(response.css('#job-location *::text').getall()).strip()
-        full_address = re.sub(r'\s+', ' ', address).strip()
+        address = " ".join(response.css('#job-location *::text').getall())
+        full_address = re.sub(r'\s+', ' ', address)
         desc_parts = response.xpath('//div[@id="job-description"]/following-sibling::div[1]//text()').getall()
-        job_description = "\n".join([part.strip() for part in desc_parts if part.strip()])
+        job_description = "\n".join([part for part in desc_parts if part])
         benefit_parts = response.xpath('//*[@id="section-job-benefits"]//div[contains(@class, "job-benefit-item")]//span//text()').getall()
-        benefits = " ".join(part.strip() for part in benefit_parts if part.strip())
+        benefits = " ".join(part for part in benefit_parts if part)
         skill_parts = response.xpath('//*[@id="section-job-skills"]//div[@class="raw-content rich-text-content"]//text()').getall()
         skills = [
-        s.strip()
+        s
         for s in skill_parts
-        if s.strip() and not s.strip().startswith("*")
+        if s and not s.startswith("*")
         ]
         categories = response.xpath('//div[contains(@class, "job-summary-item") and .//div[contains(text(), "Ngành nghề")]]//a/span/text()').getall()
-        category_str = ", ".join([c.strip() for c in categories if c.strip()])
+        category_str = ", ".join([c for c in categories if c])
         job_company_url = response.xpath('//a[contains(@href, "/viec-lam-cua/")]/@href').get()
         job_company_id = job_company_url.split('/')[-1] if job_company_url else None
         recruit_detail = {
@@ -90,13 +90,13 @@ class IndexSpider(scrapy.Spider):
             'job_company_id': job_company_id,
             'job_salary': response.xpath("//span[@class='text-primary']/text()").get(),
             'job_location': full_address,
-            'job_experience_requirement': response.xpath('//i[contains(@class, "cli-suitcase-simple")]/following-sibling::span/text()').get().strip(),
+            'job_experience_requirement': response.xpath('//i[contains(@class, "cli-suitcase-simple")]/following-sibling::span/text()').get(),
             'job_description': job_description,
             'job_benefits': benefits,
             'job_skills': skills,
-            'job_employment_type':  response.xpath('//div[contains(text(), "Loại công việc")]/following-sibling::div/text()').get().strip(),
-            'job_position':  response.xpath('//div[contains(text(), "Cấp bậc")]/following-sibling::div/text()').get().strip(),
-            'job_education_requirements': response.xpath('//div[contains(text(), "Học vấn")]/following-sibling::div/text()').get().strip(),
+            'job_employment_type':  response.xpath('//div[contains(text(), "Loại công việc")]/following-sibling::div/text()').get(),
+            'job_position':  response.xpath('//div[contains(text(), "Cấp bậc")]/following-sibling::div/text()').get(),
+            'job_education_requirements': response.xpath('//div[contains(text(), "Học vấn")]/following-sibling::div/text()').get(),
             'job_industry': category_str,  
         }
         yield recruit_detail

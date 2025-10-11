@@ -8,7 +8,7 @@ import json
 from address import parse_address_company
 from normalize_company_name import normalize_company_name
 import html
-
+from urllib.parse import urljoin
 # Định nghĩa Spider
 class IndexSpider(scrapy.Spider):
     name = 'careerlink'
@@ -45,25 +45,28 @@ class IndexSpider(scrapy.Spider):
         links = response.xpath('//a[contains(@href, "/viec-lam-")]/@href').getall()
         for link in links:
             print(link)
-            yield scrapy.Request(url=link, callback=self.parse_page)
+            yield scrapy.Request(url= link, callback=self.parse_page)
         
 
     def parse_page(self, response):
-        job_links = response.xpath('//h2[@class="box_mb box_new_left_mb"]//@href').getall()
+        job_links = response.xpath('//a[@class="tag_th title_cate "]//@href').getall()
         job_links = list(set(job_links))
         for link in job_links:
-            if link in self.crawled_job_id:
-                continue
             print(link)
+            if not 'http' in link:
+                link = urljoin('https://timviec365.vn', link)
             yield scrapy.Request(url=link, callback=self.parse_detail)
             self.crawled_job_id.add(link)
+        next_page = response.xpath('//li[@class="pagi_pre"]/a/@href').get()
+        if next_page:
+            next_page_url = response.urljoin(next_page)
+            self.log(f'Following next index page: {next_page_url}')
+            yield scrapy.Request(url=next_page_url, callback=self.parse_page)
 
         
             
     def parse_detail(self, response):
         shiet = {
-    # 1. THÔNG TIN TỔNG QUAN (Trích xuất văn bản thuần và loại bỏ khoảng trắng)
-      # Header
         "job_id": response.xpath('normalize-space(//h1[contains(@class,"com_post")]/@data-id)').get(),
         "job_title":  response.xpath('normalize-space(//h1[contains(@class,"com_post")])').get(),
         "job_salary": response.xpath('normalize-space(//p[contains(@class,"mluong_mbi")])').get()
@@ -93,14 +96,6 @@ class IndexSpider(scrapy.Spider):
         print(shiet)
         
         
-        
-        
-        
-            
-          
-
-
-    
 def run_index_crawler():
     logging.info("Starting Scrapy Spider")
     process = CrawlerProcess(settings={

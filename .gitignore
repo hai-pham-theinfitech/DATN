@@ -162,4 +162,5 @@ trino-server-473.tar.gz
 *.jar
 *.gz
 *.txt
+*.ipynb
 #tests/
