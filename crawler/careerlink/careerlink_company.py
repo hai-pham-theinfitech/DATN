@@ -14,21 +14,21 @@ class IndexSpider(scrapy.Spider):
     start_urls = [f"https://www.careerlink.vn/tim-viec-lam-nhanh"]
     crawled_company_id = set()
     custom_settings = {
-#         'ROTATING_PROXY_LIST': [
-#             'http://mobi8:Infi2132@api.yourproxy.click:5108',
-#             'http://mobi7:Infi2132@api.yourproxy.click:5107',
-#             'http://mobi6:Infi2132@api.yourproxy.click:5106',
-#             'http://mobi5:Infi2132@api.yourproxy.click:5105',
-#             'http://mobi4:Infi2132@api.yourproxy.click:5104',
-#             'http://mobi3:Infi2132@api.yourproxy.click:5103',
-#             'http://mobi2:Infi2132@api.yourproxy.click:5102'
-#         ],
+        'ROTATING_PROXY_LIST': [
+            'http://mobi8:Infi2132@api.yourproxy.click:5108',
+            'http://mobi7:Infi2132@api.yourproxy.click:5107',
+            'http://mobi6:Infi2132@api.yourproxy.click:5106',
+            'http://mobi5:Infi2132@api.yourproxy.click:5105',
+            'http://mobi4:Infi2132@api.yourproxy.click:5104',
+            'http://mobi3:Infi2132@api.yourproxy.click:5103',
+            'http://mobi2:Infi2132@api.yourproxy.click:5102'
+        ],
 
-#         'DOWNLOADER_MIDDLEWARES': {
-#     'careerlink.careerlink_proxy.middlewares.SimpleProxyMiddleware': 100, 
-#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-#     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
-# },
+        'DOWNLOADER_MIDDLEWARES': {
+    'careerlink.careerlink_proxy.middlewares.SimpleProxyMiddleware': 100, 
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 120,
+},
 
 
         'RETRY_HTTP_CODES': [403, 429, 500, 502, 503, 504],
@@ -39,12 +39,30 @@ class IndexSpider(scrapy.Spider):
         'COOKIES_ENABLED': False,
         'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
     }
+    headers = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/122.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Referer": "https://www.google.com/",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+}
+
 
     def parse(self, response):
        categories = response.xpath('//div[@class="jobs-quick-category"]//a')
        for category in categories:
            category_url = response.urljoin(category.xpath('@href').get())
-           yield scrapy.Request(url=category_url, callback=self.parse_page)
+           yield scrapy.Request(url=category_url, callback=self.parse_page, headers=self.headers)
 
     def parse_page(self, response):
         company_links = response.xpath('//a[contains(@href, "/viec-lam-cua/")]/@href').getall()
@@ -55,11 +73,11 @@ class IndexSpider(scrapy.Spider):
             if id not in self.crawled_company_id:
                 self.crawled_company_id.add(id)
                 self.log(f'Found company link: {link}')
-                yield scrapy.Request(url=link, callback=self.parse_detail)
+                yield scrapy.Request(url=link, callback=self.parse_detail, headers=self.headers)
         next_page = response.xpath("//a[@rel='next']/@href").get()
         if next_page:
             next_page = 'https://www.careerlink.vn'+next_page
-            yield scrapy.Request(url=next_page,callback=self.parse_page)
+            yield scrapy.Request(url=next_page,callback=self.parse_page, headers=self.headers)
         
             
     def parse_detail(self, response):

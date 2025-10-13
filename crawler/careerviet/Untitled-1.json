@@ -1,65 +1,53 @@
 {
-  "@context": "https://schema.org",
+  "jobLocation": [
+    {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Quận 7",
+        "addressRegion": "Hồ Chí Minh",
+        "streetAddress": "625/15A Trần Xuân Soạn , Phường Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Việt Nam",
+        "postalCode": "700000",
+        "addressCountry": "VN"
+      }
+    }
+  ],
+  "@context": "http://schema.org",
   "@type": "JobPosting",
-  "inLanguage": "vi",
-  "title": "Nhân Viên Thiết Kế Công Trình 3D",
-  "description": "<p>- Trực tiếp tham gia thiết kế các công trình nhà hàng, nội thất cửa hàng Mixue, ...</p><p>- Lên ý tưởng, phương án thiết kế.</p><p>- Hiểu biết về chất liệu và thi công</p><p>- Triển khai thiết kế kiến trúc, nội thất các hạng mục của cửa hàng</p><p>- Quản lý công việc tốt, sáng tạo, nhiệt tình, tinh thần trách nhiệm cao trong công việc</p><p>- Chi tiết công việc sẽ trao đổi cụ thể khi phỏng vấn</p><p><strong>Yêu cầu ứng viên</strong></p><p>- Nam nữ từ 25 – 32 tuổi</p><p>- Có kinh nghiệm thiết kế nội-ngoại thất tối thiểu 1 năm ở vị trí tương đương.</p><p>- Thành thạo các phần mềm thiết kế Sketchup hoặc 3Dsmax, Autocad, Photoshop, ....</p><p>- Trình độ: Cao đẳng trở lên</p><p><strong>Quyền lợi được hưởng</strong></p><p>- Thời gian làm việc: Từ T2 đến T7, từ 9AM - 6PM, tháng nghỉ CN+ 1 ngày T7</p><p>- Lương: 11.000.000 – 16.000.000 đ</p><p>- Môi trường làm việc trẻ trung, năng động, chuyên nghiệp. Đồng nghiệp thân thiện, hòa đồng...</p><p>- Có cơ hội phát triển, thăng tiến trong sự nghiệp</p><p>Ngành nghề: Mỹ thuật / Nghệ thuật / Thiết kế, Xây dựng, Kiến trúc</p><p>Kinh nghiệm: 1 Năm</p><p>Cấp bậc: Nhân viên</p><p>Hình thức: Nhân viên chính thức</p><p>Địa điểm: Hà Nội</p>",
-  "datePosted": "2025-10-02T02:00:02Z",
-  "validThrough": "2025-10-11T23:59:00Z",
+  "directApply": "True",
+  "title": "Giám Sát Công Trình - Nhận Việc Ngay",
+  "datePosted": "2025-09-06T10:49:20+0700",
+  "validThrough": "2025-11-07T00:00:00+0700",
+  "applicantLocationRequirements": { "@type": "Country", "name": "Viet Nam" },
+  "employmentType": ["FULL_TIME"],
+  "employerOverview": "Với gần 10 năm kinh nghiệm, công ty TNHH Thương Mại Xây Dựng Kiến Xanh đã trở thành một doanh nghiệp uy tín về thiết kế, thi công, cũng như cải tạo nội thất và sản xuất các sản phẩm gỗ. Tuy xuất thân từ một cơ sở sản xuất nhỏ, nhưng với độ mạnh dạn đầu tư về máy móc cùng đội ngũ nhân viên có tay nghề cao, Kiến Xanh đã và đang ngày càng lớn mạnh và phát triển.\nĐối với Kiến Xanh, sở thích và nhu cầu của khách hàng luôn được đặt trên hàng đầu. Kiến Xanh sẽ cùng khách hàng trao đổi rõ ràng và minh bạch, với đích đến cuối cùng là không gian sống khoa học, tiện ích cho gia chủ. Đồng thời, đội ngũ nhân viên Kiến Xanh sẽ luôn không ngừng trau dồi và cập nhật các xu hướng mới nhất để tư vấn và phục vụ khách hàng.\nBên cạnh đó, Kiến Xanh sẽ mang đến cho khách hàng những chính sách ưu đãi tuyệt vời và miễn phí hoàn toàn phí thiết kế cho khách thi công, Vì thế, hãy đến với Kiến Xanh nếu bạn muốn sở hữu một không gian sống ưng ý, thẩm mỹ và khoa học nhất.",
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "Công Ty TNHH Thương Mại Xây Dựng Kiến Xanh",
+    "logo": "https://media.jobsgo.vn/media/img/employer/91644-100x100.jpg",
+    "url": "https://jobsgo.vn/tuyen-dung/cong-ty-tnhh-thuong-mai-xay-dung-kien-xanh-1277946848.html"
+  },
   "baseSalary": {
     "@type": "MonetaryAmount",
     "currency": "VND",
-    "value": {
-      "@type": "QuantitativeValue",
-      "minValue": 11000000,
-      "maxValue": 16000000,
-      "unitText": "MONTH"
-    }
+    "minValue": 14000000,
+    "maxValue": 16000000,
+    "unitText": "MONTH"
   },
-  "industry": "Mỹ thuật / Nghệ thuật / Thiết kế, Xây dựng, Kiến trúc",
-  "jobBenefits": "Chế độ bảo hiểm, Du Lịch, Chế độ thưởng, Chăm sóc sức khỏe, Đào tạo, Tăng lương, Nghỉ phép năm",
+  "description": "Mô tả công việc \r\n\r\nPhối hợp với bộ phận thiết kế để nắm rõ ý tưởng, hồ sơ thiết kế kiến trúc/nội thất công trình.\r\nGiám sát việc triển khai bản vẽ thiết kế tại công trình, đảm bảo đúng ý tưởng, tiêu chuẩn kỹ thuật và thẩm mỹ.\r\nKiểm tra, đối chiếu bản vẽ thiết kế với thực tế thi công, phát hiện và đề xuất điều chỉnh kịp thời nếu có sai lệch.\r\nLàm việc với các đội thi công, nhà thầu, tư vấn kỹ thuật để giải quyết các vấn đề liên quan đến thiết kế tại công trường.\r\nĐảm bảo tiến độ, chất lượng thi công theo đúng bản vẽ và cam kết với khách hàng.\r\nHỗ trợ nghiệm thu các hạng mục công trình theo từng giai đoạn và tổng thể.\r\nBáo cáo định kỳ tình hình triển khai thiết kế thực tế cho cấp quản lý.\r\n\r\n \r\n \r\n Yêu cầu công việc \r\n\r\nTốt nghiệp chuyên ngành Kiến trúc, Nội thất, Xây dựng hoặc các ngành liên quan.\r\nCó kinh nghiệm giám sát thiết kế hoặc giám sát thi công (ưu tiên lĩnh vực nội thất, nhà ở dân dụng, showroom...).\r\nNắm vững các tiêu chuẩn thiết kế, vật liệu, kỹ thuật thi công.\r\nSử dụng tốt AutoCAD, SketchUp, các phần mềm hỗ trợ bóc tách bản vẽ, đọc hiểu hồ sơ thiết kế.\r\nƯu tiên ứng viên có khả năng đi công trình (nội thành hoặc tỉnh lân cận).\r\n\r\n \r\n \r\n Quyền lợi được hưởng \r\n\r\nLương thỏa thuận theo năng lực từ 14 - 16 triệu + tăng ca + tiền xăng,....\r\nLàm việc trong môi trường sáng tạo, năng động, có cơ hội phát triển chuyên môn.\r\nHưởng đầy đủ các chế độ: BHXH, BHYT, nghỉ phép, thưởng lễ/Tết,…\r\nCơ hội làm việc với nhiều dự án đa dạng và khách hàng lớn.\r\nChế độ du lịch\r\n",
   "experienceRequirements": {
     "@type": "OccupationalExperienceRequirements",
-    "monthsOfExperience": 12,
-    "description": "Kinh nghiệm 1 Năm"
+    "monthsOfExperience": 12
   },
+  "jobBenefits": "\r\nLương thỏa thuận theo năng lực từ 14 - 16 triệu + tăng ca + tiền xăng,....\r\nLàm việc trong môi trường sáng tạo, năng động, có cơ hội phát triển chuyên môn.\r\nHưởng đầy đủ các chế độ: BHXH, BHYT, nghỉ phép, thưởng lễ/Tết,…\r\nCơ hội làm việc với nhiều dự án đa dạng và khách hàng lớn.\r\nChế độ du lịch\r\n",
   "educationRequirements": {
     "@type": "EducationalOccupationalCredential",
-    "credentialCategory": "bachelor degree",
-    "alternateName": "Cao đẳng"
+    "credentialCategory": "associate degree"
   },
-  "directApply": true,
-  "url": "https://careerviet.vn/vi/tim-viec-lam/nhan-vien-thiet-ke-cong-trinh-3d.35C5700E.html",
-  "identifier": {
-    "@type": "PropertyValue",
-    "name": "CÔNG TY TNHH SNOW KING GLOBAL",
-    "value": "35C5700E"
-  },
-  "hiringOrganization": {
-    "@type": "Organization",
-    "name": "CÔNG TY TNHH SNOW KING GLOBAL",
-    "url": "https://careerviet.vn/vi/nha-tuyen-dung/cong-ty-tnhh-snow-king-global.35A9865D.html",
-    "logo": "https://images.careerviet.vn/employer_folders/lot9/302429/110x55/150404logo-snowking.png",
-    "description": "<p>CÔNG TY TNHH SNOW KING GLOBAL hoạt động trong lĩnh vực dịch vụ đồ uống và là công ty có vốn đầu tư nước ngoài với lịch sử hơn 20 năm phát triển.<br /><br />Thương hiệu MIXUE của chúng tôi đã phủ sóng trên hầu hết các tỉnh thành của Việt Nam, với tầm nhìn doanh nghiệp 'Đơn giản, chuyên tâm, xây dựng thương hiệu người người kính nể' chúng tôi luôn không ngừng nỗ lực để mỗi người trên thế giới đều được sử dụng sản phẩm chất lượng với giá thành rẻ.</p>"
-  },
-  "employmentType": ["FULL_TIME"],
-  "jobLocation": {
-    "@type": "Place",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Lancaster Luminaire, 1152 Đường Láng, Láng Thượng, Đống Đa, Hà Nội",
-      "addressRegion": "Quận Đống Đa",
-      "addressLocality": "Hà Nội",
-      "postalCode": "10000",
-      "addressCountry": "VN"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 21.02614451900007,
-      "longitude": 105.79900894200006
-    }
-  },
-  "skills": "designer,  chuyên viên thiết kế,  3d,  thiết kế công trình,  thiết kế công trình 3d",
-  "workHours": "8:00-17:00",
-  "applicantLocationRequirements": { "@type": "Country", "name": "Việt Nam" }
+  "industry": [
+    "Thiết Kế Sản Phẩm - Công Nghiệp",
+    "Thiết Kế Đồ Họa",
+    "Kiến Trúc - Quy Hoạch"
+  ],
+  "responsibilities": "\r\nPhối hợp với bộ phận thiết kế để nắm rõ ý tưởng, hồ sơ thiết kế kiến trúc/nội thất công trình.\r\nGiám sát việc triển khai bản vẽ thiết kế tại công trình, đảm bảo đúng ý tưởng, tiêu chuẩn kỹ thuật và thẩm mỹ.\r\nKiểm tra, đối chiếu bản vẽ thiết kế với thực tế thi công, phát hiện và đề xuất điều chỉnh kịp thời nếu có sai lệch.\r\nLàm việc với các đội thi công, nhà thầu, tư vấn kỹ thuật để giải quyết các vấn đề liên quan đến thiết kế tại công trường.\r\nĐảm bảo tiến độ, chất lượng thi công theo đúng bản vẽ và cam kết với khách hàng.\r\nHỗ trợ nghiệm thu các hạng mục công trình theo từng giai đoạn và tổng thể.\r\nBáo cáo định kỳ tình hình triển khai thiết kế thực tế cho cấp quản lý.\r\n"
 }

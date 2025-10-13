@@ -205,7 +205,7 @@ def match_province_street_address(identifying_df: DataFrame, master_df: DataFram
             master_df,
             [
                 identifying_df["province"] == master_df["province"],
-                identifying_df["street_address"] == master_df["street_address"],
+                identifying_df["street"] == master_df["street"],
             ],
             column,
             "corporate_number"
@@ -227,7 +227,7 @@ def match_address_ward_province(identifying_df: DataFrame, master_df: DataFrame,
             [
                 identifying_df["ward"] == master_df["ward"],
                 identifying_df["province"] == master_df["province"],
-                identifying_df["street_address"] == master_df["street_address"],
+                identifying_df["street"] == master_df["street"],
             ],
             column,
             "corporate_number"

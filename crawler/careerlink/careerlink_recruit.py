@@ -39,13 +39,29 @@ class IndexSpider(scrapy.Spider):
         'COOKIES_ENABLED': True,
         'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
     }
-
+    headers = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/122.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Referer": "https://www.google.com/",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+}
     def parse(self, response):
        categories = response.xpath('//div[@class="jobs-quick-category"]//a')
        for category in categories:
            category_url = response.urljoin(category.xpath('@href').get())
            category_text = category.xpath('text()').get()
-           yield scrapy.Request(url=category_url, callback=self.parse_page, meta={'category': category_text})
+           yield scrapy.Request(url=category_url, callback=self.parse_page, meta={'category': category_text}, headers=self.headers)
 
     def parse_page(self, response):
         self.log(f"crawling category: {response.meta['category']} ")
@@ -53,11 +69,11 @@ class IndexSpider(scrapy.Spider):
         for link in job_links:
             link = response.urljoin(link)
             self.log(f'Found job link: {link}')
-            yield scrapy.Request(url=link, callback=self.parse_detail, meta={'category': response.meta['category']})
+            yield scrapy.Request(url=link, callback=self.parse_detail, meta={'category': response.meta['category']}, headers=self.headers)
         next_page = response.xpath("//a[@rel='next']/@href").get()
         if next_page:
             next_page = 'https://www.careerlink.vn'+next_page
-            yield scrapy.Request(url=next_page,callback=self.parse_page, meta={'category': response.meta['category']})
+            yield scrapy.Request(url=next_page,callback=self.parse_page, meta={'category': response.meta['category']}, headers=self.headers)
         
             
     def parse_detail(self, response):

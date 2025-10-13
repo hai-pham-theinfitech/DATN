@@ -6,7 +6,6 @@ import logging
 import json
 import html
 
-from crawler.match_company import generate_ingest_id
 
 
 def clean_html(text):
@@ -31,7 +30,7 @@ class IndexSpider(scrapy.Spider):
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
             # "x-source": "Page-Container"
         }
-    api = "https://vietnamworks.com/job-search/v1.0/search"
+    api = "https://ms.vietnamworks.com/job-search/v1.0/search"
     crawled_recruit_ids = set()
     def start_requests(self):
 
@@ -125,7 +124,6 @@ class IndexSpider(scrapy.Spider):
     "type_working_id": job.get("typeWorkingId", ""),
     "job_industry": job.get("industriesV3", []),
     "visibility_display": job.get("visibilityDisplay", ""),
-    'ingest_id': generate_ingest_id()
 }
 
             
