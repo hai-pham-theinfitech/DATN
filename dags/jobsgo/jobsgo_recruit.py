@@ -2,16 +2,17 @@ import pendulum
 from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
+# from utils import (
+#     CRAWLER_DIR,
+#     SPIDER_FILE_PATH,
+#     RAW_OUTPUT_FILE_PATH,
+#     jobsgo_SPIDER_FILE_PATH,
+#     process_and_upload_to_minio,
 
-from utils import (
-    bash,
-    process_and_upload_to_minio
-)
+# )
+from utils import *
 from minio import Minio
 import os
-
-# Khởi tạo Spark session từ utils.py
-
 
 
 with DAG(
@@ -27,18 +28,13 @@ with DAG(
 
     )
 
-    # process_and_upload_to_minio_task = PythonOperator(
-    #     task_id="job",
-    #     python_callable=process_and_upload_to_minio,
-    #     op_kwargs={"media": "jobsgo"},
-    #     provide_context=True,
-    # )
-    
-    process_and_upload_to_minio_task_recruit = PythonOperator(
-        task_id="recruit",
+    process_and_upload_to_minio_task = PythonOperator(
+        task_id="job",
         python_callable=process_and_upload_to_minio,
         op_kwargs={"media": "jobsgo"},
         provide_context=True,
     )
+    
+    
 
-    run_scrapy_task >> process_and_upload_to_minio_task_recruit
+    run_scrapy_task >> process_and_upload_to_minio_task

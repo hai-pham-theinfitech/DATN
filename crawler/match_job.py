@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession, DataFrame
 from pendulum.parser import parse as pendulum_parse
 
 
-from timviec365.upsert_master_companies import create_table_from_schema, merge_schema
+from match_company import create_table_from_schema, merge_schema
 
 from pyspark.sql import functions as F
 
@@ -57,9 +57,6 @@ def upsert_recruits_table(
 
     df = df.withColumns({x: F.lit(None) for x in missing_cols})
 
-
-
-
     cols = {}
 
     for col in table_df.columns:
@@ -76,42 +73,3 @@ def upsert_recruits_table(
         set=cols,
     ).execute()
     
-def upsert_recruits_table_from_timviec365(
-    master_recruit_table: str = 's3a://datn/master/recruit',
-    recruit_table: str = 's3a://datn/raw/timviec365/recruit',
-    master_company_table: str = 's3a://datn/master/company',
-):
-
-    spark = create_spark_session()
-
-    timviec365_recruit_df = spark.read.format("delta").load(recruit_table)
-    timviec365_mapping_df = spark.read.format("delta").load(master_company_table)
-
-    timviec365_recruit_df = timviec365_recruit_df.withColumn("media_code", F.lit("timviec365"))
-
-    if timviec365_mapping_df:
-        mapping_df = (
-            timviec365_mapping_df.groupBy("timviec365_company_id")
-            .agg(
-                F.count("corporate_number").alias("count"),
-                F.first("corporate_number").alias("corporate_number"),
-                F.first("company_name").alias("master_company_name"),
-            )
-            .select("timviec365_company_id", "corporate_number", "master_company_name")
-        )
-        timviec365_recruit_df = timviec365_recruit_df.join(mapping_df, 
-                timviec365_recruit_df["job_company_id"] == mapping_df["timviec365_company_id"]).drop(mapping_df["timviec365_company_id"])
-
-    media_name="timviec365"
-    upsert_recruits_table(
-        spark,
-        media_name,
-        timviec365_recruit_df,
-        [
-            ColumnInfo("job_id", "media_internal_id"),
-            ColumnInfo("media_code", None),
-            ],
-        master_recruit_table,
-    )
-    
-upsert_recruits_table_from_timviec365()

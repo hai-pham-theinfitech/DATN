@@ -71,6 +71,7 @@ RUN pip install delta-spark pyspark minio
 RUN pip install vn_address_converter
 RUN pip install vietnamadminunits
 RUN pip install pendulum
+RUN pip install openai==2.3.0
 
 RUN pip install --no-cache-dir --default-timeout=120 minio pyspark==3.5.6 delta-spark==3.0.0
 

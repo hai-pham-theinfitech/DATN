@@ -63,6 +63,8 @@ class IndexSpider(scrapy.Spider):
         links = response.xpath('//a[contains(@href, "/viec-lam-")]/@href').getall()
         for link in links:
             print(link)
+            if not "http" in link:
+                link = "https://timviec365.vn" +link
             yield scrapy.Request(url=link, callback=self.parse_page)
         
 
@@ -71,6 +73,11 @@ class IndexSpider(scrapy.Spider):
         job_links = list(set(job_links))
         for link in job_links:
          yield scrapy.Request(url=link, callback=self.parse_detail)
+        next_page = response.xpath('//li[@class="pagi_pre"]/a/@href').get()
+        if next_page:
+            next_page_url = response.urljoin(next_page)
+            self.log(f'Following next index page: {next_page_url}')
+            yield scrapy.Request(url=next_page_url, callback=self.parse_page)
 
         
     def parse_detail(self, response):

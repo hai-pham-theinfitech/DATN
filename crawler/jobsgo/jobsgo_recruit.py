@@ -80,6 +80,7 @@ class IndexSpider(scrapy.Spider):
 
                 job_info = {
                     "source_job_url": response.url,
+                    "job_id": response.url.split('/')[-1].split('-')[-1],
                     "job_title": json_ld.get("title"),
                     "posted_at": json_ld.get("datePosted"),
                     "end_at": json_ld.get("validThrough"),

@@ -44,7 +44,6 @@ class IndexSpider(scrapy.Spider):
     def parse(self, response):
         self.log(f'crawling:  {response.url}')
 
-        # Lấy danh sách các liên kết từ trang index
         links = response.xpath('//a[@target="_blank"]/@href').getall()[:30]
         for link in links:
             link = "https://vieclam24h.vn" + link 

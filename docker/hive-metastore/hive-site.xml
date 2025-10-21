@@ -18,7 +18,7 @@
   </property>
   <property>
     <name>hive.metastore.warehouse.dir</name>
-    <value>s3a://datn/warehouse</value>
+    <value>file:///opt/hive/data/warehouse</value>
   </property>
   <property>
     <name>hive.metastore.uris</name>

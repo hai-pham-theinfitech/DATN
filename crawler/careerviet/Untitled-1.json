@@ -1,53 +1,22 @@
 {
-  "jobLocation": [
-    {
-      "@type": "Place",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Quận 7",
-        "addressRegion": "Hồ Chí Minh",
-        "streetAddress": "625/15A Trần Xuân Soạn , Phường Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Việt Nam",
-        "postalCode": "700000",
-        "addressCountry": "VN"
-      }
-    }
-  ],
-  "@context": "http://schema.org",
+  "@context": "https://schema.org",
   "@type": "JobPosting",
-  "directApply": "True",
-  "title": "Giám Sát Công Trình - Nhận Việc Ngay",
-  "datePosted": "2025-09-06T10:49:20+0700",
-  "validThrough": "2025-11-07T00:00:00+0700",
-  "applicantLocationRequirements": { "@type": "Country", "name": "Viet Nam" },
-  "employmentType": ["FULL_TIME"],
-  "employerOverview": "Với gần 10 năm kinh nghiệm, công ty TNHH Thương Mại Xây Dựng Kiến Xanh đã trở thành một doanh nghiệp uy tín về thiết kế, thi công, cũng như cải tạo nội thất và sản xuất các sản phẩm gỗ. Tuy xuất thân từ một cơ sở sản xuất nhỏ, nhưng với độ mạnh dạn đầu tư về máy móc cùng đội ngũ nhân viên có tay nghề cao, Kiến Xanh đã và đang ngày càng lớn mạnh và phát triển.\nĐối với Kiến Xanh, sở thích và nhu cầu của khách hàng luôn được đặt trên hàng đầu. Kiến Xanh sẽ cùng khách hàng trao đổi rõ ràng và minh bạch, với đích đến cuối cùng là không gian sống khoa học, tiện ích cho gia chủ. Đồng thời, đội ngũ nhân viên Kiến Xanh sẽ luôn không ngừng trau dồi và cập nhật các xu hướng mới nhất để tư vấn và phục vụ khách hàng.\nBên cạnh đó, Kiến Xanh sẽ mang đến cho khách hàng những chính sách ưu đãi tuyệt vời và miễn phí hoàn toàn phí thiết kế cho khách thi công, Vì thế, hãy đến với Kiến Xanh nếu bạn muốn sở hữu một không gian sống ưng ý, thẩm mỹ và khoa học nhất.",
-  "hiringOrganization": {
-    "@type": "Organization",
-    "name": "Công Ty TNHH Thương Mại Xây Dựng Kiến Xanh",
-    "logo": "https://media.jobsgo.vn/media/img/employer/91644-100x100.jpg",
-    "url": "https://jobsgo.vn/tuyen-dung/cong-ty-tnhh-thuong-mai-xay-dung-kien-xanh-1277946848.html"
-  },
-  "baseSalary": {
-    "@type": "MonetaryAmount",
-    "currency": "VND",
-    "minValue": 14000000,
-    "maxValue": 16000000,
-    "unitText": "MONTH"
-  },
-  "description": "Mô tả công việc \r\n\r\nPhối hợp với bộ phận thiết kế để nắm rõ ý tưởng, hồ sơ thiết kế kiến trúc/nội thất công trình.\r\nGiám sát việc triển khai bản vẽ thiết kế tại công trình, đảm bảo đúng ý tưởng, tiêu chuẩn kỹ thuật và thẩm mỹ.\r\nKiểm tra, đối chiếu bản vẽ thiết kế với thực tế thi công, phát hiện và đề xuất điều chỉnh kịp thời nếu có sai lệch.\r\nLàm việc với các đội thi công, nhà thầu, tư vấn kỹ thuật để giải quyết các vấn đề liên quan đến thiết kế tại công trường.\r\nĐảm bảo tiến độ, chất lượng thi công theo đúng bản vẽ và cam kết với khách hàng.\r\nHỗ trợ nghiệm thu các hạng mục công trình theo từng giai đoạn và tổng thể.\r\nBáo cáo định kỳ tình hình triển khai thiết kế thực tế cho cấp quản lý.\r\n\r\n \r\n \r\n Yêu cầu công việc \r\n\r\nTốt nghiệp chuyên ngành Kiến trúc, Nội thất, Xây dựng hoặc các ngành liên quan.\r\nCó kinh nghiệm giám sát thiết kế hoặc giám sát thi công (ưu tiên lĩnh vực nội thất, nhà ở dân dụng, showroom...).\r\nNắm vững các tiêu chuẩn thiết kế, vật liệu, kỹ thuật thi công.\r\nSử dụng tốt AutoCAD, SketchUp, các phần mềm hỗ trợ bóc tách bản vẽ, đọc hiểu hồ sơ thiết kế.\r\nƯu tiên ứng viên có khả năng đi công trình (nội thành hoặc tỉnh lân cận).\r\n\r\n \r\n \r\n Quyền lợi được hưởng \r\n\r\nLương thỏa thuận theo năng lực từ 14 - 16 triệu + tăng ca + tiền xăng,....\r\nLàm việc trong môi trường sáng tạo, năng động, có cơ hội phát triển chuyên môn.\r\nHưởng đầy đủ các chế độ: BHXH, BHYT, nghỉ phép, thưởng lễ/Tết,…\r\nCơ hội làm việc với nhiều dự án đa dạng và khách hàng lớn.\r\nChế độ du lịch\r\n",
-  "experienceRequirements": {
-    "@type": "OccupationalExperienceRequirements",
-    "monthsOfExperience": 12
-  },
-  "jobBenefits": "\r\nLương thỏa thuận theo năng lực từ 14 - 16 triệu + tăng ca + tiền xăng,....\r\nLàm việc trong môi trường sáng tạo, năng động, có cơ hội phát triển chuyên môn.\r\nHưởng đầy đủ các chế độ: BHXH, BHYT, nghỉ phép, thưởng lễ/Tết,…\r\nCơ hội làm việc với nhiều dự án đa dạng và khách hàng lớn.\r\nChế độ du lịch\r\n",
-  "educationRequirements": {
-    "@type": "EducationalOccupationalCredential",
-    "credentialCategory": "associate degree"
-  },
-  "industry": [
-    "Thiết Kế Sản Phẩm - Công Nghiệp",
-    "Thiết Kế Đồ Họa",
-    "Kiến Trúc - Quy Hoạch"
-  ],
-  "responsibilities": "\r\nPhối hợp với bộ phận thiết kế để nắm rõ ý tưởng, hồ sơ thiết kế kiến trúc/nội thất công trình.\r\nGiám sát việc triển khai bản vẽ thiết kế tại công trình, đảm bảo đúng ý tưởng, tiêu chuẩn kỹ thuật và thẩm mỹ.\r\nKiểm tra, đối chiếu bản vẽ thiết kế với thực tế thi công, phát hiện và đề xuất điều chỉnh kịp thời nếu có sai lệch.\r\nLàm việc với các đội thi công, nhà thầu, tư vấn kỹ thuật để giải quyết các vấn đề liên quan đến thiết kế tại công trường.\r\nĐảm bảo tiến độ, chất lượng thi công theo đúng bản vẽ và cam kết với khách hàng.\r\nHỗ trợ nghiệm thu các hạng mục công trình theo từng giai đoạn và tổng thể.\r\nBáo cáo định kỳ tình hình triển khai thiết kế thực tế cho cấp quản lý.\r\n"
-}
+  "inLanguage": "vi",
+  "title": "Nhân viên Kinh doanh Dịch vụ Y tế",
+  "description": "<p>- Khai thác nguồn khách hàng tiềm năng sử dụng dịch vụ y tế theo từng chuyên khoa được phân công theo khả năng và kinh nghiệm;</p>
+
+<p>- Tư vấn và cung cấp thông tin dịch vụ của Bệnh viện tới khách hàng;</p>
+
+<p>- Tham gia đề xuất các chương trình ưu đãi, quà tặng, chính sách... nhằm duy trì và thúc đẩy lượng khách hàng sử dụng dịch vụ;</p>
+
+<p>- Các công việc khác theo yêu cầu của Trưởng bộ phận.</p>
+<p>- Yêu cầu độ tuổi: 22 – 35;</p>
+
+<p>- Tốt nghiệp Cao đẳng, Đại học.&nbsp;</p>
+
+<p>- Giao tiếp tốt (không nói ngọng, không nói giọng địa phương), khả năng xử lý tình huống linh hoạt;</p>
+
+<p>- Có kinh nghiệm về sales hoặc telesales;</p>
+
+<p>- Thành thạo tin học văn phòng</p>
+<p>Ngành nghề: Tiếp thị / Marketing, Bán hàng / Kinh doanh, Y tế / Chăm sóc sức khỏe / Thẩm mỹ / Làm đẹp</p><p>Kinh nghiệm: 0 Năm</p><p>Cấp bậc: Nhân viên</p><p>Hình thức: Nhân viên chính thức</p><p>Địa điểm: Hà Nội</p>","datePosted": "2025-10-05T22: 00: 21Z","validThrough": "2025-11-04T23: 59: 00Z","baseSalary" : {"@type": "MonetaryAmount","currency": "VND","value": {"@type": "QuantitativeValue", "minValue":12000000,"maxValue":15000000,"unitText":"MONTH"}},"industry": "Tiếp thị / Marketing, Bán hàng / Kinh doanh, Y tế / Chăm sóc sức khỏe / Thẩm mỹ / Làm đẹp","jobBenefits": "Chế độ bảo hiểm, Du Lịch, Phụ cấp, Chế độ thưởng, Chăm sóc sức khỏe, Đào tạo, Tăng lương, CLB thể thao","educationRequirements": {"@type": "EducationalOccupationalCredential","credentialCategory": "associate degree","alternateName": "Trung cấp"},"directApply":true,"url":"https: //careerviet.vn/vi/tim-viec-lam/nhan-vien-kinh-doanh-dich-vu-y-te.35C55D2E.html","identifier": {"@type":"PropertyValue","name":"CÔNG TY TNHH BỆNH VIỆN ĐKTN AN SINH - PHÚC TRƯỜNG MINH","value":"35C55D2E"},"hiringOrganization" : {"@type" : "Organization","name" : "CÔNG TY TNHH BỆNH VIỆN ĐKTN AN SINH - PHÚC TRƯỜNG MINH","url":"https://careerviet.vn/vi/nha-tuyen-dung/cong-ty-tnhh-benh-vien-dktn-an-sinh-phuc-truong-minh.35AA10A3.html","sameAs" : "https://hongngochospital.vn/","logo":"https://images.careerviet.vn/employer_folders/lot7/337827/110x55/101519imagesq.png","description":"<p>Là một trong những Bệnh viện tư nhân đầu tiên tại Hà Nội và khu vực miền Bắc, trải qua hơn 20 năm xây dựng và phát triển, Hệ thống y tế Hồng Ngọc luôn nỗ lực không ngừng bằng sự nhiệt tình, tâm huyết với sứ mệnh cao cả “chữa bệnh cứu người” với 2 bệnh viện quy mô gần 1000 giường, 5 phòng khám vệ tinh cùng đội ngũ CBNV trên 3000 người có chuyên môn cao, giàu kinh nghiệm, đáp ứng nhu cầu khám chữa bệnh chất lượng cao và dần trở thành thương hiệu quen thuộc, là địa chỉ y tế đáng tin cậy của hàng triệu bệnh nhân khu vực Hà Nội nói riêng và phía Bắc nói chung.</p><p>Hồng Ngọc cam kết phát triển hệ thống y tế hàng đầu Việt Nam thông qua việc cung cấp các phương pháp điều trị hiện đại, trình độ chuyên môn cao, dịch vụ thuận tiện với tiêu chí bệnh viện 5 sao, bệnh viện xanh hòa nhập thiên nhiên, bệnh viện thông minh nhằm mang đến dịch vụ chăm sóc sức khỏe toàn diện nhất cho người bệnh.</p><p>Trở thành một thành viên của Tập đoàn Hồng Ngọc, các bạn sẽ được thỏa sức thể hiện năng lực của bản thân, cơ hội thăng tiến rộng mở, được đào tạo nâng cao chuyên môn nghiệp vụ và hưởng nguồn thu nhập hoàn toàn xứng đáng với năng lực.</p><p>Tìm hiểu thêm về Chúng tôi qua:</p><p><em>Website: </em><em>https://hongngochospital.vn</em></p><p><em>Fanpage Bệnh viện: https://www.facebook.com/BenhvienHongNgoc/</em></p><p><em>Fanpage tuyển dụng: https://www.facebook.com/profil?id=61550608311309</em></p><p>&nbsp;</p>"},"employmentType": ["FULL_TIME"],"jobLocation" : {"@type": "Place","address": {"@type": "PostalAddress","streetAddress": "Số 8, đường Châu Văn Liêm, phường Từ Liêm, thành phố Hà Nội.","addressRegion": "Quận Bắc Từ Liêm","addressLocality": "Hà Nội","postalCode": "10000","addressCountry": "VN"},"geo": {"@type": "GeoCoordinates","latitude": 21.009024265,"longitude": 105.769514121}},"skills" : "nhân viên kinh doanh, đại diện kinh doanh, nhân viên phòng kinh doanh, nhân viên bán hàng, đại diện bán hàng, telesales, salesman, sales engineer, sales executive, chuyên viên kinh doanh, sales dept","workHours" : "8:00-17:00","applicantLocationRequirements": {"@type": "Country","name": "Việt Nam"}}

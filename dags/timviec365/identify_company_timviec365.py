@@ -20,7 +20,7 @@ with DAG(
 ) as dag:
     run_scrapy_task = BashOperator(
         task_id="crawl",    
-        bash_command="cd /opt/airflow/crawler && python -m careerviet.identify_companies"
+        bash_command="cd /opt/airflow/crawler && python -m timviec365.identify_companies"
     )
 
    

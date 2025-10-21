@@ -61,19 +61,20 @@ class IndexSpider(scrapy.Spider):
             company = json_ld.get("hiringOrganization", {})
             data = {
                 'type': 'company',
-                'company_id': json_ld.get("identifier", {}).get("value", ""),
+                'company_id': company.get("url", "").split('.')[-2] if company.get("url", "") else None,
                 'company_name': company.get("name", ""),
+                'company_domain': company.get("sameAs", ""),
                 'company_description': company.get("description", ""),
                 'company_only_name': normalize_company_name(company.get("name", "")) if company.get("name", "") else None,
                 'company_url': company.get("url", ""),
-                'company_domain': response.xpath('//li[contains(text(), "Website:")]/text()').get().replace('Website:', '').strip() if response.xpath('//li[contains(text(), "Website:")]/text()').get() else "",
+                # 'company_domain': response.xpath('//li[contains(text(), "Website:")]/text()').get().replace('Website:', '').strip() if response.xpath('//li[contains(text(), "Website:")]/text()').get() else "",
                 'company_logo': company.get("logo", ""),
                 'company_address': company_address,
                 'province': parse_address_company(company_address) if company_address else "",
                 'district': parse_address_company(company_address, type="district") if company_address else "",
                 'ward': parse_address_company(company_address, type="ward") if company_address else "",
                 'street': parse_address_company(company_address, type="street") if company_address else "",
-                'source_company_url': response.url,
+                'source_company_url': company.get("url", ""),
                 'company_postal_code': company_postal_code if company_postal_code else "",
             }
             print(data)

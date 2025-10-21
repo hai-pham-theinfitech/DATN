@@ -63,6 +63,7 @@ class IndexSpider(scrapy.Spider):
                 'job_valid_through': json_ld.get("validThrough", ""),
                 'job_description': ' '.join(json_ld.get("description", "").replace('\xa0', ' ').replace('\r', ' ').replace('\n', ' ').replace('\t', ' ').split()),
                 'source_job_url': response.url,
+                'job_company_id': response.xpath("//a[@class='employer job-company-name']/@href").get().split('.')[-2],
                 'job_salary': json_ld.get("baseSalary", {}).get("value", {}).get("value", ""),
                 'job_min_salary': json_ld.get("baseSalary", {}).get("value", {}).get("minValue", ""),
                 'job_max_salary': json_ld.get("baseSalary", {}).get("value", {}).get("maxValue", ""),

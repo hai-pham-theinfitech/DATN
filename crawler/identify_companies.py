@@ -30,9 +30,8 @@ def create_spark_session():
 class IdentifyCompany(str, Enum):
     MASTER_COMPANY_ONLY_NAME = "MASTER_COMPANY_ONLY_NAME"
     MASTER_COMPANY_DOMAIN = "MASTER_COMPANY_DOMAIN"
-    MASTER_PROVINCE = "MASTER_PROVINCE"
-    MASTER_WARD = "MASTER_WARD"
-    MASTER_WARD_PROVINCE = "MASTER_WARD_PROVINCE"
+    MASTER_NAME_ADDRESS = "MASTER_NAME_ADDRESS" 
+    MASTER_WARD_PROVINCE_NAME = "MASTER_WARD_PROVINCE_NAME"
     MASTER_NAME_DOMAIN = "MASTER_NAME_DOMAIN"
     MASTER_STREET_PROVINCE = "MASTER_STREET_PROVINCE"
     MASTER_STREET_WARD_PROVINCE = "MASTER_STREET_WARD_PROVINCE"
@@ -41,7 +40,7 @@ class IdentifyCompany(str, Enum):
 def identify_company(
     media: str,
     master_table: str = "s3a://datn/master/company",
-    identify_method: IdentifyCompany = IdentifyCompany.MASTER_NAME_DOMAIN,
+    identify_method: IdentifyCompany = IdentifyCompany.MASTER_COMPANY_ONLY_NAME,
 ):
     
     spark = create_spark_session()
@@ -56,17 +55,19 @@ def identify_company(
     if identify_method == IdentifyCompany.MASTER_COMPANY_ONLY_NAME:
         df = match_company_only_name(company_df, master_df, column = "company_id")
     elif identify_method == IdentifyCompany.MASTER_COMPANY_DOMAIN:
+        if media == 'vietnamworks':
+            pass
         df = match_company_domain(company_df, master_df, column = "company_id")
-    elif identify_method == IdentifyCompany.MASTER_PROVINCE:
-        df = match_company_province(company_df, master_df, column = "company_id")
-    elif identify_method == IdentifyCompany.MASTER_WARD:
-        from match_company import match_company_ward
-        df = match_company_ward(company_df, master_df, column = "company_id")
-    elif identify_method == IdentifyCompany.MASTER_WARD_PROVINCE:
-        from match_company import match_company_ward_province
-        df = match_company_ward_province(company_df, master_df, column = "company_id")
+        
+    elif identify_method == IdentifyCompany.MASTER_NAME_ADDRESS:
+        df = match_company_name_address(company_df, master_df, column = "company_id")
+    elif identify_method == IdentifyCompany.MASTER_WARD_PROVINCE_NAME:
+        from match_company import match_company_ward_province_name
+        df = match_company_ward_province_name(company_df, master_df, column = "company_id")
     elif identify_method == IdentifyCompany.MASTER_NAME_DOMAIN:
         from match_company import match_company_name_domain
+        if media == 'vietnamworks':
+            pass
         df = match_company_name_domain(company_df, master_df, column = "company_id")
     elif identify_method == IdentifyCompany.MASTER_STREET_PROVINCE:
         from match_company import match_province_street_address
@@ -101,7 +102,7 @@ def identify_company(
                
 
     else:
-        df.write.format("delta").save(uuid_table)
+        df.write.format("delta").option("overwrite", "True").save(uuid_table)
 
 
 def run_identify(media: str):

@@ -12,15 +12,15 @@ import os
 
 
 with DAG(
-    dag_id="vieclam24h_identify",
+    dag_id="careerviet_identify",
     start_date=pendulum.datetime(2023, 1, 1, tz="Asia/Ho_Chi_Minh"),
     schedule=None,
     catchup=False,
-    tags=["scrapy", "minio", "vieclam24h", "parquet", "identify_company"],
+    tags=["scrapy", "minio", "careerviet", "parquet", "identify_company"],
 ) as dag:
     run_scrapy_task = BashOperator(
         task_id="crawl",    
-        bash_command="cd /opt/airflow/crawler && python -m vieclam24h.identify_companies"
+        bash_command="cd /opt/airflow/crawler && python -m careerviet.identify_companies"
     )
 
    

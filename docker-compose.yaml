@@ -17,16 +17,18 @@ services:
 
   redis:
     image: redis:6-alpine
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped  # Đảm bảo Redis tự động khởi động lại khi gặp sự cố
     volumes:
       - redis_data:/data
     networks:
       - airflow_net
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "redis-cli", "ping"]  # Kiểm tra Redis có trả lời "PONG"
+      interval: 5s  # Kiểm tra mỗi 5 giây
+      timeout: 5s   # Đặt thời gian chờ tối đa là 5 giây
+      retries: 5    # Nếu không có phản hồi, thử lại 5 lần trước khi đánh dấu là không khỏe
+
 
   minio:
     image: minio/minio:latest
@@ -78,12 +80,11 @@ services:
       HIVE_METASTORE_DB_USER: hive
       HIVE_METASTORE_DB_PASSWORD: hive
       HIVE_METASTORE_DB_NAME: metastore
-    volumes:
-      - /root/spark_minio_superset_airflow_project/docker/hive-metastore/start_metastore.sh:/usr/local/bin/start_metastore.sh
-    entrypoint: ["/bin/bash", "/usr/local/bin/start_metastore.sh"]
     depends_on:
       hive-metastore-db:
         condition: service_healthy
+    volumes:
+      - ./data/hive-warehouse:/opt/hive/data/warehouse
     networks:
       - airflow_net
     healthcheck:
@@ -91,7 +92,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
 
   trino:
     image: trinodb/trino:473
@@ -106,7 +106,6 @@ services:
       - ./docker/trino/hadoop-lib/core-site.xml:/etc/hadoop/conf/core-site.xml
       - ./docker/hive-metastore/hive-site.xml:/etc/hive/conf/hive-site.xml
       - ./docker/trino/plugin/delta:/usr/lib/trino/plugin/delta-lake
-
     environment:
       - AWS_ACCESS_KEY_ID=minioadmin
       - AWS_SECRET_ACCESS_KEY=minioadmin
@@ -120,7 +119,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/airflow/Dockerfile
-    user: airflow # Run as airflow user at runtime
+    user: airflow
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
@@ -145,7 +144,6 @@ services:
       - ./plugins:/opt/airflow/plugins
       - ./crawler:/opt/airflow/crawler
       - ./data:/opt/airflow/data
-     
     command: > 
       bash -c "
         airflow db migrate &&
@@ -153,6 +151,24 @@ services:
       "
     networks:
       - airflow_net
+
+  # superset-db:
+  #   image: postgres:13
+  #   container_name: superset_db
+  #   environment:
+  #     - POSTGRES_USER=superset
+  #     - POSTGRES_PASSWORD=superset
+  #     - POSTGRES_DB=superset
+  #   volumes:
+  #     - superset_db_data:/var/lib/postgresql/data  # Lưu trữ dữ liệu Postgres
+  #   networks:
+  #     - airflow_net
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U superset -d superset"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
 
   superset:
     image: apache/superset:3.0.1
@@ -167,25 +183,28 @@ services:
       - ADMIN_EMAIL=admin@example.com
       - ADMIN_PASSWORD=admin
       - FLASK_APP=superset
-      - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://superset:superset@superset-db:5432/superset
-    depends_on:
-      airflow-db:
-        condition: service_healthy
-      superset-db:
-        condition: service_healthy
+      - SQLALCHEMY_DATABASE_URI=sqlite:////app/superset_home/superset.db  # Đảm bảo tệp `superset.db` sẽ lưu trong thư mục ngoài container
     volumes:
-      - ./docker/superset:/app/superset_config
-      - superset_db_data:/var/lib/postgresql/data
+      - ./docker/superset:/app/superset_config  # Cấu hình Superset
+      - ./superset_home:/app/superset_home  # Ánh xạ đúng thư mục vào container
+    user: "root"  # Đổi thành root nếu gặp lỗi quyền
     command: >
       bash -c "
         pip install trino &&
-        superset db upgrade &&
-        superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@example.com --password admin || true &&
-        superset init &&
-        superset run -h 0.0.0.0 -p 8088 --with-threads --reload --debugger
+        chown -R superset:superset /app/superset_home &&  # Đảm bảo quyền ghi vào thư mục superset_home
+        su superset -c 'superset db upgrade' &&
+        su superset -c 'superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@example.com --password admin' || true &&
+        su superset -c 'superset init' &&
+        su superset -c 'superset run -h 0.0.0.0 -p 8088 --with-threads'
       "
     networks:
       - airflow_net
+    restart: unless-stopped  # Đảm bảo container sẽ tự khởi động lại khi gặp sự cố
+    # Thêm restart policy để container khởi động lại khi gặp sự cố
+
+
+
+
 
   airflow-webserver:
     build:
@@ -219,6 +238,7 @@ services:
     command: webserver 
     networks:
       - airflow_net
+
   airflow-worker:
     build:
       context: .
@@ -288,23 +308,6 @@ services:
     command: scheduler
     networks:
       - airflow_net
-  superset-db:
-    image: postgres:13
-    container_name: superset_db
-    environment:
-      - POSTGRES_USER=superset
-      - POSTGRES_PASSWORD=superset
-      - POSTGRES_DB=superset
-    volumes:
-      - superset_db_data:/var/lib/postgresql/data
-    networks:
-      - airflow_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U superset -d superset"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
 
 networks:
   airflow_net:
@@ -316,6 +319,5 @@ volumes:
   hive_metastore_data:
   pg_data:
   redis_data:
-  superset_db_data:
-  
-
+  # superset_db_data:
+  superset_home:

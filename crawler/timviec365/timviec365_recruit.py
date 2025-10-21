@@ -45,6 +45,8 @@ class IndexSpider(scrapy.Spider):
         links = response.xpath('//a[contains(@href, "/viec-lam-")]/@href').getall()
         for link in links:
             print(link)
+            if not "http" in link:
+                link = urljoin('https://timviec365.vn', link)
             yield scrapy.Request(url= link, callback=self.parse_page)
         
 
