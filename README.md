@@ -51,5 +51,10 @@ Repository này xây dựng một hệ thống tự động thu thập, xử lý
 - Xây dựng hệ thống tìm kiếm việc làm, dashboard quản trị nhân sự, báo cáo thị trường cho doanh nghiệp.
 
 ## Trực quan hóa dữ liệu:
+- Dưới đây là 4 trong số nhiều chart được tạo ra sau quá trình làm giàu, xử lý dữ liệu:
+![Chart 1](chart/chart1.png)
+![Chart 2](chart/chart2.png)
+![Chart 3](chart/chart3.png)
+![Chart 4](chart/chart4.png)
 
 
