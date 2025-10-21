@@ -57,4 +57,16 @@ Repository này xây dựng một hệ thống tự động thu thập, xử lý
 ![Chart 3](chart/chart3.png)
 ![Chart 4](chart/chart4.png)
 
+| Giai đoạn                | Thời gian trung bình           | Hiệu năng / Đặc điểm                                             |
+|--------------------------|-------------------------------|------------------------------------------------------------------|
+| Crawl dữ liệu            | 8–12 phút / website           | Tốc độ phụ thuộc độ sâu trang và số lượng tin                   |
+| Xử lý & chuẩn hóa (Spark)| 3 phút / 50.000 bản ghi       | Tốc độ ổn định, có thể mở rộng theo node                        |
+| Identify trùng lặp       | 2 phút / 10.000 bản ghi       | Tỷ lệ phát hiện trùng ~9–10%                                    |
+| Phân loại LLM (DeepSeek) | 1.2 giây / bản ghi           | Độ chính xác trung bình 90%                                     |
+| Truy vấn dữ liệu (Trino) | 3 giây / truy vấn đơn giản    | Có thể mở rộng lên nhiều worker                                 |
+| Render dashboard (Superset) | 1–2 giây                   | Phụ thuộc vào kích thước dataset                                |
+
+
+
+
 
