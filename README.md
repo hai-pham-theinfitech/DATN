@@ -50,7 +50,6 @@ Repository này xây dựng một hệ thống tự động thu thập, xử lý
 - Huấn luyện mô hình AI về tuyển dụng, gợi ý việc làm, phân tích năng lực thị trường.
 - Xây dựng hệ thống tìm kiếm việc làm, dashboard quản trị nhân sự, báo cáo thị trường cho doanh nghiệp.
 
-## Đang cập nhật...
+## Trực quan hóa dữ liệu:
 
-- Áp dụng LLM để phân loại và làm sạch dữ liệu.
-- Trực quan hóa dữ liệu và quy trình daily.
+
